@@ -44,8 +44,8 @@ jobs:
       - name: Build Docker Image
         working-directory: MLProject
         run: |
-          docker build -t rifan75/iris_classification:latest .
+          docker build -t rifan75/heart_disease:latest .
 
       - name: Push Docker Image to Docker Hub
         run: |
-          docker push rifan75/iris_classification:latest
+          docker push rifan75/heart_disease:latest

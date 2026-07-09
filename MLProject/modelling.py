@@ -5,8 +5,8 @@ import mlflow
 import mlflow.sklearn
 
 # Load preprocessed data
-train_df = pd.read_csv("iris_preprocessing/iris_train.csv")
-test_df = pd.read_csv("iris_preprocessing/iris_test.csv")
+train_df = pd.read_csv("heart_disease_preprocessing/heart_disease_train.csv")
+test_df = pd.read_csv("heart_disease_preprocessing/heart_disease_test.csv")
 
 X_train = train_df.drop("target", axis=1)
 y_train = train_df["target"]
