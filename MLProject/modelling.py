@@ -13,14 +13,13 @@ y_train = train_df["target"]
 X_test = test_df.drop("target", axis=1)
 y_test = test_df["target"]
 
-# Set MLflow tracking URI (local)
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
+# Use local MLflow tracking (no server needed in CI)
+mlflow.set_tracking_uri("file:./mlruns")
 mlflow.set_experiment("iris_classification")
 
-# Train model with autolog
 mlflow.sklearn.autolog()
 
-with mlflow.start_run(run_name="random_forest_autolog"):
+with mlflow.start_run(run_name="random_forest_ci"):
     model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
 
