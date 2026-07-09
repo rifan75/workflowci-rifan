@@ -27,7 +27,7 @@ jobs:
       - name: Run MLflow Project (Train Model)
         working-directory: MLProject
         run: |
-          mlflow run . --env-manager=local
+          mlflow run . --env-manager=local --experiment-name=iris_classification
 
       - name: Upload model artifacts
         uses: actions/upload-artifact@v4
@@ -44,12 +44,10 @@ jobs:
       - name: Build Docker Image with MLflow
         working-directory: MLProject
         run: |
-          # Get the latest run_id
-          RUN_ID=$(ls -t mlruns/*/meta.yaml 2>/dev/null | head -1 | xargs grep run_id | awk '{print $2}' || true)
-          if [ -z "$RUN_ID" ]; then
-            RUN_ID=$(find mlruns -name "meta.yaml" -path "*/[!e]*/*" | head -1 | xargs grep "run_id" | awk '{print $2}')
-          fi
-          mlflow models build-docker -m "mlruns/1/$RUN_ID/artifacts/model" -n "rifanbaihaqie/iris_classification" --enable-mlserver
+          EXPERIMENT_ID=$(ls mlruns/ | grep -v "^0$" | head -1)
+          RUN_ID=$(ls mlruns/$EXPERIMENT_ID/ | grep -v "meta.yaml" | head -1)
+          echo "Using experiment=$EXPERIMENT_ID run=$RUN_ID"
+          mlflow models build-docker -m "mlruns/$EXPERIMENT_ID/$RUN_ID/artifacts/model" -n "rifanbaihaqie/iris_classification"
 
       - name: Push Docker Image to Docker Hub
         run: |
